@@ -53,34 +53,20 @@ class ViewController: UIViewController, UITextFieldDelegate {
                             // 緯度経度をデバッグエリアに表示
                             print(targetCoordinate)
                             
+                            let pin = MKPointAnnotation()
+                            
+                            pin.coordinate = targetCoordinate
+                            
                             // 取得した位置情報の緯度経度
                             let latitude = targetCoordinate.latitude
                             let longitude = targetCoordinate.longitude
                             let location = CLLocationCoordinate2DMake(latitude,longitude)
                             
-                            // 表示するマップの中心を、取得した位置情報のポイントに指定
-                            self.dispMap.setCenter(location, animated: true)
+                            pin.title = searchKey
                             
-                            // 表示する領域を設定する
-                            var region: MKCoordinateRegion = self.dispMap.region
-                            // 領域設定の中心
-                            region.center = location
-                            // 表示する領域の拡大・縮小の係数
-                            region.span.latitudeDelta = 0.01
-                            region.span.longitudeDelta = 0.01
+                            self.dispMap.addAnnotation(pin)
                             
-                            // ピンのオブジェクトを生成
-                            let pointAnnotation: MKPointAnnotation = MKPointAnnotation()
-                            
-                            // ピンの位置を取得した位置情報の位置に設定
-                            pointAnnotation.coordinate = location
-                            // ピンをタップした際に表示される吹き出しの内容
-                            pointAnnotation.title = searchKey
-                            
-                            // 設定したピンをマップ上に反映
-                            self.dispMap.addAnnotation(pointAnnotation)
-                            // 決定した表示設定をMapViewに適用
-                            self.dispMap.setRegion(region, animated: true)
+                            self.dispMap.region = MKCoordinateRegion.init(center: location, latitudinalMeters: 500.0, longitudinalMeters: 500.0)
                         }
                     }
                 }
